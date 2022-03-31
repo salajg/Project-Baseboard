@@ -29,7 +29,7 @@ public class Shoot : MonoBehaviour {
 		if (NDSInput.buttonA() && !moving && !freeCam) {
 			direction = playerCamera.transform.position - ball.transform.position;
 			rb.constraints = RigidbodyConstraints.None;
-            rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.15f;
+            rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.25f;
 			moving = true;
         }
 		if (NDSInput.buttonY() && counter == 0) {
@@ -50,18 +50,19 @@ public class Shoot : MonoBehaviour {
 			direction = playerCamera.transform.position - ball.transform.position;
         }
 		else if (!freeCam && !moving) {
-			rotateCam();
+			rotateCam();		
+			if (NDSInput.buttonUp()) {
+				speed = Mathf.Clamp(speed+1, 15, 100);
+			}
+			else if (NDSInput.buttonDown()) {
+				speed = Mathf.Clamp(speed-1, 15, 100);
+			}
         }
 		else {
 			moveCam();
 			rotateFreecam();
 		}
-		if (NDSInput.buttonR()) {
-			speed = Mathf.Clamp(speed+1, 0, 100);
-		}
-		else if (NDSInput.buttonL()) {
-			speed = Mathf.Clamp(speed-1, 0, 100);
-		}
+
 		if (rb.velocity.magnitude != 0) {
 			rb.velocity = rb.velocity * 0.995f;
 			if (rb.velocity.magnitude <= 0.1) {
@@ -73,9 +74,9 @@ public class Shoot : MonoBehaviour {
 			moving = false;
 		}
 		if (!moving) {
-			rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+			rb.constraints = RigidbodyConstraints.FreezeAll;
 		}
-		if (counter != 0) {
+		if (counter > 0) {
 			counter--;
 		}
 	}
@@ -113,21 +114,32 @@ public class Shoot : MonoBehaviour {
 		}
 	}
 	void rotateCam() {
-		if (NDSInput.buttonUp() || NDSInput.buttonUp_R()) {
+		if (NDSInput.buttonUp_R()) {
 			if ((playerCamera.transform.eulerAngles.x <= 75f  || playerCamera.transform.eulerAngles.x >= 358f) && playerCamera.transform.eulerAngles.x >= 0f) {
 				playerCamera.transform.RotateAround(ball.transform.position, playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
 			}
 		}
-		if (NDSInput.buttonDown() || NDSInput.buttonDown_R()) {
+		if (NDSInput.buttonDown_R()) {
 			if (playerCamera.transform.eulerAngles.x <= 90f && playerCamera.transform.eulerAngles.x >= 0f) {
 				playerCamera.transform.RotateAround(ball.transform.position, -playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
 			}
 		}
-		if (NDSInput.buttonRight() || NDSInput.buttonRight_R()) {
-			playerCamera.transform.RotateAround(ball.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * 5f);
+		float rotateSpeed = 5f;
+		if (NDSInput.buttonZR()) {
+			rotateSpeed = 1f;
 		}
-		if (NDSInput.buttonLeft() || NDSInput.buttonLeft_R()) {
-			playerCamera.transform.RotateAround(ball.transform.position, Vector3.up, movementSpeed * Time.deltaTime * 5f);
+		if (NDSInput.buttonRight_R()) {
+			playerCamera.transform.RotateAround(ball.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
+		}
+		if (NDSInput.buttonLeft_R()) {
+			playerCamera.transform.RotateAround(ball.transform.position, Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
+		}
+		Vector3 tdir = playerCamera.transform.position - ball.transform.position;
+		if (NDSInput.buttonR() && tdir.magnitude > 0.4f && tdir.magnitude < 25f) {
+			playerCamera.transform.position = ball.transform.position + 1.01f * tdir;
+		}
+		if (NDSInput.buttonL() && tdir.magnitude > 0.5f && tdir.magnitude < 26f) {
+			playerCamera.transform.position = ball.transform.position + 0.99f * tdir;
 		}
 	}
 	void rotateFreecam() {

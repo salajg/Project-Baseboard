@@ -147,10 +147,10 @@ public class Shoot : MonoBehaviour {
 			rotateSpeed = 1f;
 		}
 		if (NDSInput.buttonRight()) {
-			playerCamera.transform.RotateAround(ball.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
+			playerCamera.transform.RotateAround(ball.transform.position, Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
 		}
 		if (NDSInput.buttonLeft()) {
-			playerCamera.transform.RotateAround(ball.transform.position, Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
+			playerCamera.transform.RotateAround(ball.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
 		}
 		Vector3 tdir = playerCamera.transform.position - ball.transform.position;
 		if (NDSInput.buttonR() && tdir.magnitude > 0.4f && tdir.magnitude < 25f) {

@@ -25,6 +25,7 @@ public class Shoot : MonoBehaviour {
 		rb = ball.GetComponent<Rigidbody>();
 		NDSInput = new NInput();
 		playerCamera.transform.position = ball.transform.position + (Vector3.back * 4) + (Vector3.up * 2);
+		direction = playerCamera.transform.position - ball.transform.position;
 		touching = (Touching) ball.GetComponent(typeof(Touching));
 		startPos = ball.transform.position;
 	}
@@ -35,10 +36,11 @@ public class Shoot : MonoBehaviour {
 			startPos = ball.transform.position;
 			direction = playerCamera.transform.position - ball.transform.position;
 			rb.constraints = RigidbodyConstraints.None;
-            rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.25f;
+            rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.75f;
 			shotCount++;
 			moving = true;
         }
+
 		if (NDSInput.buttonY() && counter == 0) {
 			if (!freeCam) {
 				direction = playerCamera.transform.position - ball.transform.position;
@@ -51,25 +53,23 @@ public class Shoot : MonoBehaviour {
 			freeCam = !freeCam;
 			counter = 20;
         }
+
 		if (NDSInput.buttonB()) {
-			direction = playerCamera.transform.position - ball.transform.position;
 			ball.transform.position = startPos;
 			playerCamera.transform.position = direction + ball.transform.position;
 			moving = false;
         }
-		if (!freeCam && moving) {
-            playerCamera.transform.position = direction + ball.transform.position;
+
+		if (!freeCam) {
 			rotateCam();
-			direction = playerCamera.transform.position - ball.transform.position;
-        }
-		else if (!freeCam && !moving) {
-			rotateCam();		
-			if (NDSInput.buttonUp_R()) {
-				speed = Mathf.Clamp(speed+1, 15, 100);
-			}
-			else if (NDSInput.buttonDown_R()) {
-				speed = Mathf.Clamp(speed-1, 15, 100);
-			}
+			if (!moving) {
+				if (NDSInput.buttonUp_R()) {
+					speed = Mathf.Clamp(speed+1, 15, 100);
+				}
+				else if (NDSInput.buttonDown_R()) {
+					speed = Mathf.Clamp(speed-1, 15, 100);
+				}
+			}	
         }
 		else {
 			moveCam();
@@ -78,8 +78,8 @@ public class Shoot : MonoBehaviour {
 
 		if (rb.velocity.magnitude != 0) {
 			rb.velocity = rb.velocity * 0.995f;
-			if (rb.velocity.magnitude <= 0.1) {
-				rb.velocity = new Vector3(0,0,0);
+			if (rb.velocity.magnitude <= 0.75f) {
+				rb.velocity = Vector3.zero;
 				moving = false;
 			}
 		}
@@ -89,7 +89,6 @@ public class Shoot : MonoBehaviour {
 		if (!moving) {
 			rb.constraints = RigidbodyConstraints.FreezeAll;
 			if (touching.isInvalid()) {
-				direction = playerCamera.transform.position - ball.transform.position;
 				ball.transform.position = startPos;
 				playerCamera.transform.position = direction + ball.transform.position;
 			}
@@ -97,11 +96,6 @@ public class Shoot : MonoBehaviour {
 		if (counter > 0) {
 			counter--;
 		}
-	}
-
-	void OnGUI() {
-		string text = "Power: " + speed.ToString();
-		GUI.Label(new Rect(20, 10, 100, 20), text);
 	}
 
 	void LateUpdate() {
@@ -132,6 +126,7 @@ public class Shoot : MonoBehaviour {
 		}
 	}
 	void rotateCam() {
+		playerCamera.transform.position = direction + ball.transform.position;
 		if (NDSInput.buttonUp()) {
 			if ((playerCamera.transform.eulerAngles.x <= 75f  || playerCamera.transform.eulerAngles.x >= 358f) && playerCamera.transform.eulerAngles.x >= 0f) {
 				playerCamera.transform.RotateAround(ball.transform.position, playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
@@ -159,6 +154,7 @@ public class Shoot : MonoBehaviour {
 		if (NDSInput.buttonL() && tdir.magnitude > 0.5f && tdir.magnitude < 26f) {
 			playerCamera.transform.position = ball.transform.position + 0.99f * tdir;
 		}
+		direction = playerCamera.transform.position - ball.transform.position;
 	}
 	void rotateFreecam() {
 		if (NDSInput.buttonUp_R()) {
@@ -186,7 +182,8 @@ public class Shoot : MonoBehaviour {
 		else {
 			lr.positionCount = 2;
 		}
-		lr.SetPosition(0, ball.transform.position);
+		Vector3 radius = new Vector3(0, -ball.GetComponent<SphereCollider>().radius*0f, 0);
+		lr.SetPosition(0, ball.transform.position + radius);
 		Vector3 linePoint = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.05f + ball.transform.position;
         lr.SetPosition(1, linePoint);
 	}

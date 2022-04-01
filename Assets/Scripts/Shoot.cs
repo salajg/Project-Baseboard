@@ -15,21 +15,28 @@ public class Shoot : MonoBehaviour {
 	private Vector3 direction;
 	private Quaternion rotation;
 	public LineRenderer lr;
+	public int shotCount = 0;
 	private int counter;
+	private Touching touching;
+	private Vector3 startPos;
 
 	// Use this for initialization
 	void Start () {
 		rb = ball.GetComponent<Rigidbody>();
 		NDSInput = new NInput();
 		playerCamera.transform.position = ball.transform.position + (Vector3.back * 4) + (Vector3.up * 2);
+		touching = (Touching) ball.GetComponent(typeof(Touching));
+		startPos = ball.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (NDSInput.buttonA() && !moving && !freeCam) {
+			startPos = ball.transform.position;
 			direction = playerCamera.transform.position - ball.transform.position;
 			rb.constraints = RigidbodyConstraints.None;
             rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.25f;
+			shotCount++;
 			moving = true;
         }
 		if (NDSInput.buttonY() && counter == 0) {
@@ -44,6 +51,12 @@ public class Shoot : MonoBehaviour {
 			freeCam = !freeCam;
 			counter = 20;
         }
+		if (NDSInput.buttonB()) {
+			direction = playerCamera.transform.position - ball.transform.position;
+			ball.transform.position = startPos;
+			playerCamera.transform.position = direction + ball.transform.position;
+			moving = false;
+        }
 		if (!freeCam && moving) {
             playerCamera.transform.position = direction + ball.transform.position;
 			rotateCam();
@@ -51,10 +64,10 @@ public class Shoot : MonoBehaviour {
         }
 		else if (!freeCam && !moving) {
 			rotateCam();		
-			if (NDSInput.buttonUp()) {
+			if (NDSInput.buttonUp_R()) {
 				speed = Mathf.Clamp(speed+1, 15, 100);
 			}
-			else if (NDSInput.buttonDown()) {
+			else if (NDSInput.buttonDown_R()) {
 				speed = Mathf.Clamp(speed-1, 15, 100);
 			}
         }
@@ -75,6 +88,11 @@ public class Shoot : MonoBehaviour {
 		}
 		if (!moving) {
 			rb.constraints = RigidbodyConstraints.FreezeAll;
+			if (touching.isInvalid()) {
+				direction = playerCamera.transform.position - ball.transform.position;
+				ball.transform.position = startPos;
+				playerCamera.transform.position = direction + ball.transform.position;
+			}
 		}
 		if (counter > 0) {
 			counter--;
@@ -114,12 +132,12 @@ public class Shoot : MonoBehaviour {
 		}
 	}
 	void rotateCam() {
-		if (NDSInput.buttonUp_R()) {
+		if (NDSInput.buttonUp()) {
 			if ((playerCamera.transform.eulerAngles.x <= 75f  || playerCamera.transform.eulerAngles.x >= 358f) && playerCamera.transform.eulerAngles.x >= 0f) {
 				playerCamera.transform.RotateAround(ball.transform.position, playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
 			}
 		}
-		if (NDSInput.buttonDown_R()) {
+		if (NDSInput.buttonDown()) {
 			if (playerCamera.transform.eulerAngles.x <= 90f && playerCamera.transform.eulerAngles.x >= 0f) {
 				playerCamera.transform.RotateAround(ball.transform.position, -playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
 			}
@@ -128,10 +146,10 @@ public class Shoot : MonoBehaviour {
 		if (NDSInput.buttonZR()) {
 			rotateSpeed = 1f;
 		}
-		if (NDSInput.buttonRight_R()) {
+		if (NDSInput.buttonRight()) {
 			playerCamera.transform.RotateAround(ball.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
 		}
-		if (NDSInput.buttonLeft_R()) {
+		if (NDSInput.buttonLeft()) {
 			playerCamera.transform.RotateAround(ball.transform.position, Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
 		}
 		Vector3 tdir = playerCamera.transform.position - ball.transform.position;

@@ -20,19 +20,12 @@ public class userInterface : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		power.fillAmount = shoot.speed * 0.01f;
-		if(power.fillAmount < 0.2f)
-        {
-            power.color = Color.red;
-        }
-        else if(power.fillAmount < 0.6f)
-        {
-            power.color = Color.yellow;
-        }
-        else
-        {
-            power.color = Color.green;
-        }
-        score.text = "Shot: " + shoot.shotCount;
-        header.text = "Course: " + game.course + " - Hole: " + game.hole + " - Par: " + game.par;
+        power.color = calcColor(power.fillAmount);
+        score.text = "Shot: " + (shoot.shotCount+1);
+        header.text = "Course: 1" + " - Hole: " + game.hole + " - Par: " + game.par;
 	}
+
+    Color calcColor(float val) {
+        return Color.HSVToRGB(val, 1, 1);
+    }
 }

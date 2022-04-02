@@ -7,16 +7,18 @@ public class Shoot : MonoBehaviour {
 	public GameObject ball;
 	public Camera playerCamera;
 	public Camera botCamera;
-	public float speed;
+	public float movementSpeed;
+	public LineRenderer lineRenderer;
+	public int shotCount = 1;
+
+	[HideInInspector] public float speed = 50f;
+
 	private Rigidbody rb;
 	private bool moving = true;
 	private bool freeCam = false;
 	private NInput NDSInput;
-	public float movementSpeed;
 	private Vector3 direction;
 	private Quaternion rotation;
-	public LineRenderer lr;
-	public int shotCount = 1;
 	private int counter;
 	private Touching touching;
 	private Vector3 startPos;
@@ -27,51 +29,31 @@ public class Shoot : MonoBehaviour {
 	void Start () {
 		rb = ball.GetComponent<Rigidbody>();
 		NDSInput = new NInput();
-		//playerCamera.transform.position = ball.transform.position + (Vector3.back * 4) + (Vector3.up * 2);
-		//direction = playerCamera.transform.position - ball.transform.position;
 		touching = (Touching) ball.GetComponent(typeof(Touching));
 		rb.constraints = RigidbodyConstraints.None;
-		//startPos = ball.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (NDSInput.buttonA() && !moving && !freeCam) {
-			startPos = ball.transform.position;
-			direction = playerCamera.transform.position - ball.transform.position;
-			rb.constraints = RigidbodyConstraints.None;
-            rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.75f;
-			shotCount++;
-			moving = true;
+			makeShot();
         }
 
 		if (NDSInput.buttonY() && counter == 0) {
-			if (!freeCam) {
-				direction = playerCamera.transform.position - ball.transform.position;
-				rotation = playerCamera.transform.rotation;
-			}
-			else {
-				playerCamera.transform.position = direction + ball.transform.position;
-				playerCamera.transform.rotation = rotation;
-			}
-			freeCam = !freeCam;
-			counter = 20;
+			toggleFreecam();
         }
 
 		if (NDSInput.buttonB() && setStartPos) {
-			rb.velocity = Vector3.zero;
-			ball.transform.position = startPos;
-			playerCamera.transform.position = direction + ball.transform.position;
-			moving = false;
+			resetShot();
         }
 
 		if (!freeCam) {
 			rotateCam();
 			if (!moving) {
-				if (NDSInput.buttonUp_R()) {
+				if (NDSInput.buttonUp_R() || NDSInput.buttonUp_D()) {
 					speed = Mathf.Clamp(speed+1, 5, 100);
 				}
-				else if (NDSInput.buttonDown_R()) {
+				else if (NDSInput.buttonDown_R() || NDSInput.buttonDown_D()) {
 					speed = Mathf.Clamp(speed-1, 5, 100);
 				}
 			}	
@@ -92,16 +74,16 @@ public class Shoot : MonoBehaviour {
 			moving = false;
 		}
 		if (!moving) {
-			//rb.constraints = RigidbodyConstraints.FreezeAll;
 			ball.transform.rotation = Quaternion.identity;
-			if (touching.isInvalid()) {
-				ball.transform.position = startPos;
-				playerCamera.transform.position = direction + ball.transform.position;
-			}
 			if (!setStartPos) {
 				startPos = ball.transform.position;
 				setStartPos = true;
 			}
+			if (touching.isInvalid()) {
+				ball.transform.position = startPos;
+				playerCamera.transform.position = direction + ball.transform.position;
+			}
+
 		}
 		if (counter > 0) {
 			counter--;
@@ -114,6 +96,35 @@ public class Shoot : MonoBehaviour {
 	void LateUpdate() {
         drawLine();
     }
+
+	void makeShot() {
+		startPos = ball.transform.position;
+		direction = playerCamera.transform.position - ball.transform.position;
+		rb.constraints = RigidbodyConstraints.None;
+		rb.velocity = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.75f;
+		shotCount++;
+		moving = true;
+	}
+
+	void toggleFreecam() {
+		if (!freeCam) {
+			direction = playerCamera.transform.position - ball.transform.position;
+			rotation = playerCamera.transform.rotation;
+		}
+		else {
+			playerCamera.transform.position = direction + ball.transform.position;
+			playerCamera.transform.rotation = rotation;
+		}
+		freeCam = !freeCam;
+		counter = 20;
+	}
+
+	void resetShot() {
+		rb.velocity = Vector3.zero;
+		ball.transform.position = startPos;
+		playerCamera.transform.position = direction + ball.transform.position;
+		moving = false;
+	}
 
 	void moveCam() {
 		if (NDSInput.buttonUp()) {
@@ -128,16 +139,17 @@ public class Shoot : MonoBehaviour {
 		if (NDSInput.buttonLeft()) {
 			playerCamera.transform.position -= Vector3.Scale(playerCamera.transform.right, new Vector3(1, 0, 1)) * Time.deltaTime * movementSpeed;
 		}
-		if (NDSInput.buttonZL()) {
+		if (NDSInput.buttonL()) {
 			playerCamera.transform.position += Vector3.Scale(playerCamera.transform.up, new Vector3(0, 1, 0)) * Time.deltaTime * movementSpeed;
 		}
-		if (NDSInput.buttonZR()) {
+		if (NDSInput.buttonR()) {
 			Vector3 temp = playerCamera.transform.position - Vector3.Scale(playerCamera.transform.up, new Vector3(0, 1, 0)) * Time.deltaTime * movementSpeed;
 			if(temp.y > 0.5f) {
 				playerCamera.transform.position = temp;
 			}
 		}
 	}
+	
 	void rotateCam() {
 		playerCamera.transform.position = direction + ball.transform.position;
 		if (NDSInput.buttonUp()) {
@@ -154,10 +166,10 @@ public class Shoot : MonoBehaviour {
 		if (NDSInput.buttonZR()) {
 			rotateSpeed = 1f;
 		}
-		if (NDSInput.buttonRight()) {
+		if (NDSInput.buttonRight() || NDSInput.buttonRight_D()) {
 			playerCamera.transform.RotateAround(ball.transform.position, Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
 		}
-		if (NDSInput.buttonLeft()) {
+		if (NDSInput.buttonLeft() || NDSInput.buttonLeft_D()) {
 			playerCamera.transform.RotateAround(ball.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * rotateSpeed);
 		}
 		Vector3 tdir = playerCamera.transform.position - ball.transform.position;
@@ -169,36 +181,37 @@ public class Shoot : MonoBehaviour {
 		}
 		direction = playerCamera.transform.position - ball.transform.position;
 	}
+
 	void rotateFreecam() {
 		if (NDSInput.buttonUp_R()) {
 			if ((playerCamera.transform.eulerAngles.x <= 75f  || playerCamera.transform.eulerAngles.x >= 358f) && playerCamera.transform.eulerAngles.x >= 0f) {
-				playerCamera.transform.RotateAround(playerCamera.transform.position, -playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
+				playerCamera.transform.RotateAround(playerCamera.transform.position, -playerCamera.transform.right, movementSpeed * Time.deltaTime * 10f);	
 			}
 		}
 		if (NDSInput.buttonDown_R()) {
 			if (playerCamera.transform.eulerAngles.x <= 90f && playerCamera.transform.eulerAngles.x >= 0f) {
-				playerCamera.transform.RotateAround(playerCamera.transform.position, playerCamera.transform.right, movementSpeed * Time.deltaTime * 5f);	
+				playerCamera.transform.RotateAround(playerCamera.transform.position, playerCamera.transform.right, movementSpeed * Time.deltaTime * 10f);	
 			}
 		}
 		if (NDSInput.buttonRight_R()) {
-			playerCamera.transform.RotateAround(playerCamera.transform.position, Vector3.up, movementSpeed * Time.deltaTime * 5f);
+			playerCamera.transform.RotateAround(playerCamera.transform.position, Vector3.up, movementSpeed * Time.deltaTime * 10f);
 		}
 		if (NDSInput.buttonLeft_R()) {
-			playerCamera.transform.RotateAround(playerCamera.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * 5f);
+			playerCamera.transform.RotateAround(playerCamera.transform.position, -Vector3.up, movementSpeed * Time.deltaTime * 10f);
 		}
 	}
 	void drawLine() {
 		if (moving || freeCam) {
-			lr.positionCount = 0;
+			lineRenderer.positionCount = 0;
 			return;
 		}
 		else {
-			lr.positionCount = 2;
+			lineRenderer.positionCount = 2;
 		}
 		Vector3 radius = new Vector3(0, -ball.GetComponent<SphereCollider>().radius*0f, 0);
-		lr.SetPosition(0, ball.transform.position + radius);
+		lineRenderer.SetPosition(0, ball.transform.position + radius);
 		Vector3 linePoint = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.05f + ball.transform.position;
-        lr.SetPosition(1, linePoint);
+        lineRenderer.SetPosition(1, linePoint);
 	}
 
 	public bool inGoal() {

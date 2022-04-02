@@ -56,7 +56,9 @@
      <Compile Include="Assets\Scripts\ToggleObject.cs" />
      <Compile Include="Assets\Scripts\Touching.cs" />
      <Compile Include="Assets\Scripts\combineMesh.cs" />
-     <Compile Include="Assets\Scripts\powerBar.cs" />
+     <Compile Include="Assets\Scripts\gameRunner.cs" />
+     <Compile Include="Assets\Scripts\lockRotation.cs" />
+     <Compile Include="Assets\Scripts\userInterface.cs" />
      <None Include="Assets\Textures\TerrainN3DS.shader" />
      <None Include="Assets\Shader\Simple.shader" />
  <Reference Include="UnityEngine.UI">

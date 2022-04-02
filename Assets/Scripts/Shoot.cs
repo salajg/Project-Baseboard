@@ -6,28 +6,32 @@ public class Shoot : MonoBehaviour {
 
 	public GameObject ball;
 	public Camera playerCamera;
+	public Camera botCamera;
 	public float speed;
 	private Rigidbody rb;
-	private bool moving = false;
+	private bool moving = true;
 	private bool freeCam = false;
 	private NInput NDSInput;
 	public float movementSpeed;
 	private Vector3 direction;
 	private Quaternion rotation;
 	public LineRenderer lr;
-	public int shotCount = 0;
+	public int shotCount = 1;
 	private int counter;
 	private Touching touching;
 	private Vector3 startPos;
+	private bool setStartPos = false;
+	private int resetFlag = 20;
 
 	// Use this for initialization
 	void Start () {
 		rb = ball.GetComponent<Rigidbody>();
 		NDSInput = new NInput();
-		playerCamera.transform.position = ball.transform.position + (Vector3.back * 4) + (Vector3.up * 2);
-		direction = playerCamera.transform.position - ball.transform.position;
+		//playerCamera.transform.position = ball.transform.position + (Vector3.back * 4) + (Vector3.up * 2);
+		//direction = playerCamera.transform.position - ball.transform.position;
 		touching = (Touching) ball.GetComponent(typeof(Touching));
-		startPos = ball.transform.position;
+		rb.constraints = RigidbodyConstraints.None;
+		//startPos = ball.transform.position;
 	}
 	
 	// Update is called once per frame
@@ -54,7 +58,8 @@ public class Shoot : MonoBehaviour {
 			counter = 20;
         }
 
-		if (NDSInput.buttonB()) {
+		if (NDSInput.buttonB() && setStartPos) {
+			rb.velocity = Vector3.zero;
 			ball.transform.position = startPos;
 			playerCamera.transform.position = direction + ball.transform.position;
 			moving = false;
@@ -64,10 +69,10 @@ public class Shoot : MonoBehaviour {
 			rotateCam();
 			if (!moving) {
 				if (NDSInput.buttonUp_R()) {
-					speed = Mathf.Clamp(speed+1, 15, 100);
+					speed = Mathf.Clamp(speed+1, 5, 100);
 				}
 				else if (NDSInput.buttonDown_R()) {
-					speed = Mathf.Clamp(speed-1, 15, 100);
+					speed = Mathf.Clamp(speed-1, 5, 100);
 				}
 			}	
         }
@@ -75,26 +80,34 @@ public class Shoot : MonoBehaviour {
 			moveCam();
 			rotateFreecam();
 		}
-
-		if (rb.velocity.magnitude != 0) {
+		
+		if (rb.velocity.magnitude != 0 && resetFlag == 0) {
 			rb.velocity = rb.velocity * 0.995f;
-			if (rb.velocity.magnitude <= 0.75f) {
+			if (rb.velocity.magnitude <= 0.75f && rb.velocity.y <= 0.01f && rb.velocity.y >= -0.01f) {
 				rb.velocity = Vector3.zero;
 				moving = false;
 			}
 		}
-		else {
+		else if (resetFlag == 0) {
 			moving = false;
 		}
 		if (!moving) {
-			rb.constraints = RigidbodyConstraints.FreezeAll;
+			//rb.constraints = RigidbodyConstraints.FreezeAll;
+			ball.transform.rotation = Quaternion.identity;
 			if (touching.isInvalid()) {
 				ball.transform.position = startPos;
 				playerCamera.transform.position = direction + ball.transform.position;
 			}
+			if (!setStartPos) {
+				startPos = ball.transform.position;
+				setStartPos = true;
+			}
 		}
 		if (counter > 0) {
 			counter--;
+		}
+		if (resetFlag > 0) {
+			resetFlag--;
 		}
 	}
 
@@ -186,5 +199,23 @@ public class Shoot : MonoBehaviour {
 		lr.SetPosition(0, ball.transform.position + radius);
 		Vector3 linePoint = Vector3.Normalize(Vector3.Scale(ball.transform.position - playerCamera.transform.position, new Vector3(1, 0, 1))) * speed * 0.05f + ball.transform.position;
         lr.SetPosition(1, linePoint);
+	}
+
+	public bool inGoal() {
+		return touching.isGoal() && !moving;
+	}
+
+	public void reset(Vector3 newPos, Vector3 cameraPos, Vector3 botPos) {
+		ball.transform.position = newPos;
+		ball.transform.rotation = Quaternion.identity;
+		moving = true;
+		playerCamera.transform.position = cameraPos;
+		botCamera.transform.position = botPos;
+		playerCamera.transform.LookAt(ball.transform);
+		direction = playerCamera.transform.position - ball.transform.position;
+		shotCount = 0;
+		freeCam = false;
+		setStartPos = false;
+		resetFlag = 20;
 	}
 }

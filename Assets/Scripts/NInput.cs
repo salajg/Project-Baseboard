@@ -9,10 +9,10 @@ public class NInput : MonoBehaviour {
 		UnityEngine.N3DS.Keyboard.SetType(N3dsKeyboardType.Qwerty);
 	}
 	public bool buttonA() {
-		return (Input.GetMouseButtonDown(0) || UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.A));
+		return (Input.GetKey("z") || UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.A));
 	}
 	public bool buttonB() {
-		return (Input.GetMouseButtonDown(1) || UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.B));
+		return (Input.GetKey("x") || UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.B));
 	}
 	public bool buttonX() {
 		return (Input.GetKey("enter") || UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.X));

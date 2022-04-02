@@ -13,8 +13,10 @@ ModelImporter:
     400004: Plane
     2300000: Cube.002
     2300002: Plane
+    2300004: //RootNode
     3300000: Cube.002
     3300002: Plane
+    3300004: //RootNode
     4300000: Cube.002
     4300002: Plane
     7400000: Cube.002|Cube.002Action
@@ -23,6 +25,30 @@ ModelImporter:
     7400006: Plane|Cube.002Action
     7400008: Plane|PlaneAction
     7400010: Plane|Shader NodetreeAction
+    7400012: Cube.002|Cube.002|Cube.002|Cube.002Action|Cube.002|Cube.002Action
+    7400014: Cube.002|Cube.002|Cube.002|PlaneAction|Cube.002|PlaneAction
+    7400016: Cube.002|Cube.002|Cube.002|Shader NodetreeAction|Cube.002|Shader Nodetre
+    7400018: Cube.002|Cube.016|Cube.002|Cube.002Action|Cube.002|Cube.002Action
+    7400020: Cube.002|Cube.016|Cube.002|Cube.002Action|Cube.002|Cube.002Action.004
+    7400022: Cube.002|Cube.016|Cube.002|PlaneAction|Cube.002|PlaneAction
+    7400024: Cube.002|Cube.016|Cube.002|PlaneAction|Cube.002|PlaneAction.001
+    7400026: Cube.002|Cube.016|Cube.002|Shader NodetreeAction|Cube.002|Shader Nod
+    7400028: Cube.002|Cube.016|Cube.002|Shader NodetreeAction|Cube.002|Shader Nodetre
+    7400030: Cube.002|Cube.017|Cube.002|Cube.002Action|Cube.002|Cube.002Action
+    7400032: Cube.002|Cube.017|Cube.002|PlaneAction|Cube.002|PlaneAction
+    7400034: Cube.002|Cube.017|Cube.002|Shader NodetreeAction|Cube.002|Shader Nodetre
+    7400036: Cube.002|Plane.001|Plane|Cube.002Action|Plane|Cube.002Action
+    7400038: Cube.002|Plane.001|Plane|Cube.002Action|Plane|Cube.002Action.002
+    7400040: Cube.002|Plane.001|Plane|PlaneAction|Plane|PlaneAction
+    7400042: Cube.002|Plane.001|Plane|PlaneAction|Plane|PlaneAction.001
+    7400044: Cube.002|Plane.001|Plane|Shader NodetreeAction|Plane|Shader Nodetree
+    7400046: Cube.002|Plane.001|Plane|Shader NodetreeAction|Plane|Shader NodetreeActi
+    7400048: Cube.002|Plane.002|Plane|Cube.002Action|Plane|Cube.002Action
+    7400050: Cube.002|Plane.002|Plane|PlaneAction|Plane|PlaneAction
+    7400052: Cube.002|Plane.002|Plane|Shader NodetreeAction|Plane|Shader NodetreeActi
+    7400054: Cube.002|Plane|Plane|Cube.002Action|Plane|Cube.002Action
+    7400056: Cube.002|Plane|Plane|PlaneAction|Plane|PlaneAction
+    7400058: Cube.002|Plane|Plane|Shader NodetreeAction|Plane|Shader NodetreeAction
     9500000: //RootNode
   materials:
     importMaterials: 1

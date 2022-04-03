@@ -4,26 +4,47 @@ using UnityEngine;
 
 public class Move : MonoBehaviour {
 
+	public GameObject car;
+	public float max;
+	public float min;
 	public float movementSpeed;
+	public float rotationSpeed;
+
+	private bool rotateflag;
+	private float counter = 0;
 
 	// Use this for initialization
 	void Start () {
-		UnityEngine.N3DS.Keyboard.SetType(N3dsKeyboardType.Qwerty);
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.Emulation_Up)) {
-			transform.position += transform.forward * Time.deltaTime * movementSpeed;
+	void Update () {		
+		if (rotateflag) {
+			rotate ();
 		}
-		if (UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.Emulation_Down)) {
-			transform.position -= transform.forward * Time.deltaTime * movementSpeed;
+		else {
+			car.transform.Translate(Vector3.down * Time.deltaTime * movementSpeed);
+			if (counter <= 0) {
+				if (car.transform.localPosition.z > max || car.transform.localPosition.z < min) {
+					rotateflag = true;
+					counter = 5;
+				}
+			}
+			else {
+				counter -= 1;
+			}	
 		}
-		if (UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.Emulation_Right)) {
-			transform.position += transform.right * Time.deltaTime * movementSpeed;
+
+
+	}
+
+	void rotate(){
+		car.transform.Rotate(Vector3.forward * Time.deltaTime * rotationSpeed * 5f);
+		if (car.transform.localEulerAngles.y >= 179.5f && car.transform.localEulerAngles.y <= 180.5f) {
+			rotateflag = false;
 		}
-		if (UnityEngine.N3DS.GamePad.GetButtonHold(N3dsButton.Emulation_Left)) {
-			transform.position -= transform.right * Time.deltaTime * movementSpeed;
+		if (car.transform.localEulerAngles.y >= 359.5f || car.transform.localEulerAngles.y <= 0.5f) {
+			rotateflag = false;
 		}
 	}
 }

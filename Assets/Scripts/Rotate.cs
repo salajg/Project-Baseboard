@@ -3,23 +3,20 @@ using System.Collections;
 
 public class Rotate : MonoBehaviour
 {
+	public Camera playerCamera;
+	public GameObject center;
+	public GameObject windmill;
+	public float movementSpeed;
+
+
 	void Start()
 	{
-		Vector3 pos = transform.position;
-		distance = pos.magnitude;
-		direction = Mathf.Atan2(pos.z, pos.x);
-		elevation = Mathf.Asin(pos.y / distance);
+		playerCamera.transform.LookAt(center.transform);
 	}
 
 	void Update()
 	{
-		direction += 0.01f;
-		float rCosE = distance * Mathf.Cos(elevation);
-		transform.position = new Vector3(rCosE * Mathf.Cos(direction), distance * Mathf.Sin(elevation), rCosE * Mathf.Sin(direction));
-		transform.LookAt(Vector3.zero);
+		windmill.transform.Rotate(Vector3.up * Time.deltaTime * movementSpeed * 5f);
+		playerCamera.transform.RotateAround(center.transform.position, -Vector3.up, movementSpeed * Time.deltaTime);
 	}
-
-	private float direction;
-	private float elevation;
-	private float distance;
 }

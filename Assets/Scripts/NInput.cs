@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class NInput : MonoBehaviour {
 
+	public bool emulation = false;
 	// Use this for initialization
 	void Start () {
 		UnityEngine.N3DS.Keyboard.SetType(N3dsKeyboardType.Qwerty);

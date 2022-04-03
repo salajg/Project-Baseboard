@@ -10,7 +10,7 @@ public class Shoot : MonoBehaviour {
 	public float movementSpeed;
 	public LineRenderer lineRenderer;
 	public int shotCount = 1;
-
+	public bool paused = false;
 	[HideInInspector] public float speed = 50f;
 
 	private Rigidbody rb;
@@ -24,17 +24,29 @@ public class Shoot : MonoBehaviour {
 	private Vector3 startPos;
 	private bool setStartPos = false;
 	private int resetFlag = 20;
+	private int pauseCounter = 0;
+	private Vector3 pauseVelocity;
 
 	// Use this for initialization
 	void Start () {
 		rb = ball.GetComponent<Rigidbody>();
 		NDSInput = new NInput();
+		NDSInput.emulation = Application.isPlaying;
 		touching = (Touching) ball.GetComponent(typeof(Touching));
 		rb.constraints = RigidbodyConstraints.None;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (NDSInput.buttonStart() && pauseCounter <= 0) {
+			togglePause(true);
+		}
+		else if (pauseCounter > 0) {
+			pauseCounter--;
+		}
+		if (paused) {
+			return;
+		}
 		if (NDSInput.buttonA() && !moving && !freeCam) {
 			makeShot();
         }
@@ -96,6 +108,26 @@ public class Shoot : MonoBehaviour {
 	void LateUpdate() {
         drawLine();
     }
+
+	public void togglePause(bool active) {
+		if (!paused) {
+			pauseVelocity = rb.velocity;
+			rb.velocity = Vector3.zero;
+			rb.Sleep();
+			paused = true;
+		}
+		else {
+			rb.WakeUp();
+			if (active) {
+				rb.velocity = pauseVelocity;
+			}
+			else {
+				rb.velocity = Vector3.zero;
+			}
+			paused = false;
+		}
+		pauseCounter = 20;
+	}
 
 	void makeShot() {
 		startPos = ball.transform.position;

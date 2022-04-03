@@ -47,7 +47,7 @@ public class Shoot : MonoBehaviour {
 		if (paused) {
 			return;
 		}
-		if (NDSInput.buttonA() && !moving && !freeCam) {
+		if (NDSInput.buttonA() && !moving && !freeCam && pauseCounter <= 0) {
 			makeShot();
         }
 

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class gameRunner : MonoBehaviour {
 	
 	public int course;
 	public int hole;
 	public int par;
+	public Image cursor;
 
 	private Shoot shoot;
 	private NInput NDSInput;
@@ -18,6 +20,10 @@ public class gameRunner : MonoBehaviour {
 	private bool nextFlag = false;
 	private userInterface UI;
 	private bool menuFlag = false;
+	private bool pauseFlag = false;
+	private int[] cursorPos = {20, -20, -60};
+	private int menuOption = 0;
+	private int menuCount = 0;
 	
 	// Use this for initialization
 	void Start () {
@@ -53,8 +59,46 @@ public class gameRunner : MonoBehaviour {
 				counter--;
 			}
 		}
+		if (pauseFlag != shoot.paused) {
+			
+
+			if (shoot.paused) {
+				UI.enablePauseMenu();
+				menuOption = 0;
+				menuCount = 0;
+				cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[menuOption], cursor.transform.localPosition.z);
+			}
+			else {
+				UI.disablePauseMenu();
+			}	
+			pauseFlag = shoot.paused;
+		}
 		if (shoot.paused) {
-			UI.enablePauseMenu();
+			cursor.color = new Color(0.75f + 0.1f * Mathf.Sin(Time.time * 2), 0.75f + 0.1f * Mathf.Sin(Time.time * 2), 0.75f + 0.1f * Mathf.Sin(Time.time * 2), 1);
+			if ((NDSInput.toggleDown() || NDSInput.toggleDown_D()) && menuCount <= 0) {
+				menuOption = (menuOption + 1) % 3;
+				cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[menuOption], cursor.transform.localPosition.z);
+				menuCount = 10;
+			}
+			if ((NDSInput.toggleUp() || NDSInput.toggleUp_D()) && menuCount <= 0) {
+				if (menuOption == 0) {
+					menuOption = 3;
+				}
+				menuOption = (menuOption - 1) % 3;
+				cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[menuOption], cursor.transform.localPosition.z);
+				menuCount = 10;
+			}
+			if (NDSInput.buttonA()) {
+				if (menuOption == 0) {
+					Continue();
+				}
+				else if (menuOption == 1) {
+					Restart();
+				}
+				else if (menuOption == 2) {
+					Menu();
+				}
+			}
 			if (NDSInput.buttonX()) {
 				Restart();
 			}
@@ -62,8 +106,8 @@ public class gameRunner : MonoBehaviour {
 				Menu();
 			}
 		}
-		else {
-			UI.disablePauseMenu();
+		if (menuCount > 0) {
+			menuCount--;
 		}
 	}
 

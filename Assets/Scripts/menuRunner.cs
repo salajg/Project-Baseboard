@@ -11,8 +11,10 @@ public class menuRunner : MonoBehaviour {
 	public GameObject loadingScreen;
 	public GameObject menu;
 	public Image loadingBar;
+	public Image cursor;
 	private NInput NDSInput;
 	private bool menuFlag = false;
+	private int[] cursorPos = {10, -40};
 	// Use this for initialization
 	void Start () {
 		NDSInput = new NInput();
@@ -22,11 +24,20 @@ public class menuRunner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (NDSInput.buttonA()) {
-			play();
+		cursor.color = new Color(0.75f + 0.1f * Mathf.Sin(Time.time * 2), 0.75f + 0.1f * Mathf.Sin(Time.time * 2), 0.75f + 0.1f * Mathf.Sin(Time.time * 2), 1);
+		if (NDSInput.buttonA() || NDSInput.buttonStart()) {
+			if (cursor.transform.localPosition.y == cursorPos[0]) {
+				play();
+			}
+			else if (cursor.transform.localPosition.y == cursorPos[1]) {
+				exit();
+			}
 		}
-		if (NDSInput.buttonB()) {
-			exit();
+		if (NDSInput.buttonDown() || NDSInput.buttonDown_D()) {
+			cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[1], cursor.transform.localPosition.z);
+		}
+		if (NDSInput.buttonUp() || NDSInput.buttonUp_D()) {
+			cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[0], cursor.transform.localPosition.z);
 		}
 	}
 
@@ -40,22 +51,12 @@ public class menuRunner : MonoBehaviour {
 		StartCoroutine(LoadYourAsyncScene());
 	}
 	public void exit(){
-		#if UNITY_EDITOR
-        	UnityEditor.EditorApplication.isPlaying = false;
-		#else
-			Application.Quit();
-		#endif
+		Debug.Log("Exiting");
+		Application.Quit();
 	}
 
 	IEnumerator LoadYourAsyncScene() {
-        // The Application loads the Scene in the background as the current Scene runs.
-        // This is particularly good for creating loading screens.
-        // You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
-        // a sceneBuildIndex of 1 as shown in Build Settings.
-
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Course");
-
-        // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
 			loadingBar.fillAmount = asyncLoad.progress;

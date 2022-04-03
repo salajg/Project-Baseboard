@@ -33,10 +33,12 @@ public class userInterface : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		power.fillAmount = shoot.speed * 0.01f;
-        power.color = calcColor(power.fillAmount);
-        score.text = "Shot: " + (shoot.shotCount+1);
-        header.text = "Course: 1" + " - Hole: " + game.hole + " - Par: " + game.par;
+        if (bottomUI.activeSelf) {
+            power.fillAmount = shoot.speed * 0.01f;
+            power.color = calcColor(power.fillAmount);
+            score.text = "Shot: " + (shoot.shotCount+1);
+            header.text = "Course: 1" + " - Hole: " + game.hole + " - Par: " + game.par;
+        }
 	}
 
     public void enableTopUI() {

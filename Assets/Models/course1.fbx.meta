@@ -21,6 +21,23 @@ ModelImporter:
     100026: Hole1Flag
     100028: Hole1Green
     100030: HoleGoal
+    100032: Hole1Goal
+    100034: Hole1Obstacles
+    100036: Hole2Flag
+    100038: Hole2Goal
+    100040: Hole2Green
+    100042: Hole2Obstacles
+    100044: Hole3Flag
+    100046: Hole3Goal
+    100048: Hole3Green
+    100050: Hole3Obstacles
+    100052: Plane_MeshPart0
+    100054: Plane_MeshPart1
+    100056: Plane_MeshPart2
+    100058: Plane_MeshPart3
+    100060: Tree1
+    100062: Windmill
+    100064: Windmillblades
     400000: //RootNode
     400002: Cube
     400004: Ground
@@ -37,6 +54,23 @@ ModelImporter:
     400026: Hole1Flag
     400028: Hole1Green
     400030: HoleGoal
+    400032: Hole1Goal
+    400034: Hole1Obstacles
+    400036: Hole2Flag
+    400038: Hole2Goal
+    400040: Hole2Green
+    400042: Hole2Obstacles
+    400044: Hole3Flag
+    400046: Hole3Goal
+    400048: Hole3Green
+    400050: Hole3Obstacles
+    400052: Plane_MeshPart0
+    400054: Plane_MeshPart1
+    400056: Plane_MeshPart2
+    400058: Plane_MeshPart3
+    400060: Tree1
+    400062: Windmill
+    400064: Windmillblades
     2300000: Cube
     2300002: Ground
     2300004: Plane.006
@@ -52,6 +86,23 @@ ModelImporter:
     2300024: Hole1Flag
     2300026: Hole1Green
     2300028: HoleGoal
+    2300030: Hole1Goal
+    2300032: Hole1Obstacles
+    2300034: Hole2Flag
+    2300036: Hole2Goal
+    2300038: Hole2Green
+    2300040: Hole2Obstacles
+    2300042: Hole3Flag
+    2300044: Hole3Goal
+    2300046: Hole3Green
+    2300048: Hole3Obstacles
+    2300050: Plane_MeshPart0
+    2300052: Plane_MeshPart1
+    2300054: Plane_MeshPart2
+    2300056: Plane_MeshPart3
+    2300058: Tree1
+    2300060: Windmill
+    2300062: Windmillblades
     3300000: Cube
     3300002: Ground
     3300004: Plane.006
@@ -67,6 +118,23 @@ ModelImporter:
     3300024: Hole1Flag
     3300026: Hole1Green
     3300028: HoleGoal
+    3300030: Hole1Goal
+    3300032: Hole1Obstacles
+    3300034: Hole2Flag
+    3300036: Hole2Goal
+    3300038: Hole2Green
+    3300040: Hole2Obstacles
+    3300042: Hole3Flag
+    3300044: Hole3Goal
+    3300046: Hole3Green
+    3300048: Hole3Obstacles
+    3300050: Plane_MeshPart0
+    3300052: Plane_MeshPart1
+    3300054: Plane_MeshPart2
+    3300056: Plane_MeshPart3
+    3300058: Tree1
+    3300060: Windmill
+    3300062: Windmillblades
     4300000: Plane.006
     4300002: Cube
     4300004: Ground
@@ -82,6 +150,23 @@ ModelImporter:
     4300024: Course1Props
     4300026: Hole1Flag
     4300028: HoleGoal
+    4300030: Hole2Green
+    4300032: Hole3Green
+    4300034: Hole1Obstacles
+    4300036: Hole2Obstacles
+    4300038: Hole3Obstacles
+    4300040: Hole1Goal
+    4300042: Hole2Flag
+    4300044: Hole2Goal
+    4300046: Hole3Flag
+    4300048: Hole3Goal
+    4300050: Plane_MeshPart0
+    4300052: Plane_MeshPart1
+    4300054: Plane_MeshPart2
+    4300056: Plane_MeshPart3
+    4300058: Windmill
+    4300060: Windmillblades
+    4300062: Tree1
   materials:
     importMaterials: 1
     materialName: 0

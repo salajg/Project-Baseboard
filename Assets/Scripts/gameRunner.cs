@@ -76,17 +76,14 @@ public class gameRunner : MonoBehaviour {
 		if (shoot.paused) {
 			cursor.color = new Color(0.75f + 0.1f * Mathf.Sin(Time.time * 2), 0.75f + 0.1f * Mathf.Sin(Time.time * 2), 0.75f + 0.1f * Mathf.Sin(Time.time * 2), 1);
 			if ((NDSInput.toggleDown() || NDSInput.toggleDown_D()) && menuCount <= 0) {
-				menuOption = (menuOption + 1) % 3;
+				menuOption = Mathf.Clamp(menuOption + 1, 0, 2);
 				cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[menuOption], cursor.transform.localPosition.z);
-				menuCount = 10;
+				menuCount = 30;
 			}
 			if ((NDSInput.toggleUp() || NDSInput.toggleUp_D()) && menuCount <= 0) {
-				if (menuOption == 0) {
-					menuOption = 3;
-				}
-				menuOption = (menuOption - 1) % 3;
+				menuOption = Mathf.Clamp(menuOption - 1, 0, 2);
 				cursor.transform.localPosition = new Vector3(cursor.transform.localPosition.x, cursorPos[menuOption], cursor.transform.localPosition.z);
-				menuCount = 10;
+				menuCount = 30;
 			}
 			if (NDSInput.buttonA()) {
 				if (menuOption == 0) {

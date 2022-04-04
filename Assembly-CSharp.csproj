@@ -46,12 +46,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GamepadScript.cs" />
-     <Compile Include="Assets\Scripts\Move.cs" />
      <Compile Include="Assets\Scripts\NInput.cs" />
      <Compile Include="Assets\Scripts\Rotate.cs" />
      <Compile Include="Assets\Scripts\Shoot.cs" />
-     <Compile Include="Assets\Scripts\ToggleObject.cs" />
      <Compile Include="Assets\Scripts\Touching.cs" />
      <Compile Include="Assets\Scripts\gameRunner.cs" />
      <Compile Include="Assets\Scripts\lockRotation.cs" />

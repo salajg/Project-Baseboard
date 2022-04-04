@@ -11,6 +11,7 @@ public class Shoot : MonoBehaviour {
 	public LineRenderer lineRenderer;
 	public int shotCount = 1;
 	public bool paused = false;
+	public GameObject windmill;
 	[HideInInspector] public float speed = 50f;
 
 	private Rigidbody rb;
@@ -103,6 +104,7 @@ public class Shoot : MonoBehaviour {
 		if (resetFlag > 0) {
 			resetFlag--;
 		}
+		windmill.transform.Rotate(Vector3.up * Time.deltaTime * movementSpeed * 5f);
 	}
 
 	void LateUpdate() {

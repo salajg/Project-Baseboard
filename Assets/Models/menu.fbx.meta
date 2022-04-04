@@ -76,6 +76,8 @@ ModelImporter:
     100136: Wood_Car
     100138: Wooden_Case
     100140: Woods
+    100142: Menu Object
+    100144: Windmillblades
     400000: Bank_01
     400002: Bank_02
     400004: Barn_01
@@ -147,6 +149,8 @@ ModelImporter:
     400136: Wood_Car
     400138: Wooden_Case
     400140: Woods
+    400142: Menu Object
+    400144: Windmillblades
     2300000: Bank_01
     2300002: Bank_02
     2300004: Barn_01
@@ -215,6 +219,8 @@ ModelImporter:
     2300130: Wood_Car
     2300132: Wooden_Case
     2300134: Woods
+    2300136: Menu Object
+    2300138: Windmillblades
     3300000: Bank_01
     3300002: Bank_02
     3300004: Barn_01
@@ -283,6 +289,8 @@ ModelImporter:
     3300130: Wood_Car
     3300132: Wooden_Case
     3300134: Woods
+    3300136: Menu Object
+    3300138: Windmillblades
     4300000: House_01
     4300002: House_02
     4300004: House_03
@@ -351,6 +359,8 @@ ModelImporter:
     4300130: Tree_03.001
     4300132: Vooden_Barrel.001
     4300134: Vooden_Barrel.002
+    4300136: Menu Object
+    4300138: Windmillblades
   materials:
     importMaterials: 1
     materialName: 0

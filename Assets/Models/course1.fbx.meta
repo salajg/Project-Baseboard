@@ -17,6 +17,10 @@ ModelImporter:
     100018: Cloth
     100020: Pole
     100022: Flag
+    100024: Course1Props
+    100026: Hole1Flag
+    100028: Hole1Green
+    100030: HoleGoal
     400000: //RootNode
     400002: Cube
     400004: Ground
@@ -29,6 +33,10 @@ ModelImporter:
     400018: Cloth
     400020: Pole
     400022: Flag
+    400024: Course1Props
+    400026: Hole1Flag
+    400028: Hole1Green
+    400030: HoleGoal
     2300000: Cube
     2300002: Ground
     2300004: Plane.006
@@ -40,6 +48,10 @@ ModelImporter:
     2300016: Cloth
     2300018: Pole
     2300020: Flag
+    2300022: Course1Props
+    2300024: Hole1Flag
+    2300026: Hole1Green
+    2300028: HoleGoal
     3300000: Cube
     3300002: Ground
     3300004: Plane.006
@@ -51,6 +63,10 @@ ModelImporter:
     3300016: Cloth
     3300018: Pole
     3300020: Flag
+    3300022: Course1Props
+    3300024: Hole1Flag
+    3300026: Hole1Green
+    3300028: HoleGoal
     4300000: Plane.006
     4300002: Cube
     4300004: Ground
@@ -62,6 +78,10 @@ ModelImporter:
     4300016: Pole
     4300018: Cloth
     4300020: Flag
+    4300022: Hole1Green
+    4300024: Course1Props
+    4300026: Hole1Flag
+    4300028: HoleGoal
   materials:
     importMaterials: 1
     materialName: 0
